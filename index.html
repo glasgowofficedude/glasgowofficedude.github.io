@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>VAT Helpline – Quality Notes</title>
+  <!-- Correct stylesheet link -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -29,7 +30,7 @@
     </details>
   </section>
 
-  <!-- Settings (persist via localStorage) -->
+  <!-- Settings (closable) -->
   <section class="card">
     <details id="settingsDetails">
       <summary class="details-summary">⚙️ Settings</summary>
@@ -37,7 +38,7 @@
         <div class="grid">
           <label for="officerName">Your Name</label>
           <div>
-            <input id="officerName" type="text" placeholder="e.g., Your name here" />
+            <input id="officerName" type="text" placeholder="Your name" />
           </div>
 
           <label for="ccelRef">CCEL Ref</label>
@@ -54,38 +55,44 @@
   <section class="card">
     <h2>📝 Call Intake</h2>
     <div class="grid">
+      <!-- VRN -->
       <label for="vrn">VRN (VAT Registration Number)</label>
       <div class="input-with-copy">
         <input id="vrn" type="text" inputmode="numeric" placeholder="e.g., 123456789" />
-        <button class="copy-btn" data-copy-target="vrn" aria-label="Copy VRN">Copy</button>
+        <button class="copy-btn" data-copy-target="vrn">Copy</button>
       </div>
 
+      <!-- Business -->
       <label for="businessName">Business Name</label>
       <div class="input-with-copy">
         <input id="businessName" type="text" placeholder="Registered business name" />
-        <button class="copy-btn" data-copy-target="businessName" aria-label="Copy Business Name">Copy</button>
+        <button class="copy-btn" data-copy-target="businessName">Copy</button>
       </div>
 
+      <!-- Address -->
       <label for="addressLine">First line of address</label>
       <div class="input-with-copy">
         <input id="addressLine" type="text" placeholder="e.g., 1 Example Street" />
-        <button class="copy-btn" data-copy-target="addressLine" aria-label="Copy Address Line">Copy</button>
+        <button class="copy-btn" data-copy-target="addressLine">Copy</button>
       </div>
 
+      <!-- Postcode -->
       <label for="postcode">Postcode</label>
       <div class="input-with-copy">
         <input id="postcode" type="text" placeholder="e.g., G1 2AB" />
-        <button class="copy-btn" data-copy-target="postcode" aria-label="Copy Postcode">Copy</button>
+        <button class="copy-btn" data-copy-target="postcode">Copy</button>
       </div>
 
       <!-- Security + indicator -->
       <label for="securityResult" class="security-label">
         Security
-        <span id="securityIndicator"
-              class="sec-indicator warn"
-              role="img"
-              aria-label="Security not passed"
-              title="Security not passed">✖</span>
+        <span
+          id="securityIndicator"
+          class="sec-indicator warn"
+          role="img"
+          aria-label="Security not passed"
+          title="Security not passed"
+        >✖</span>
       </label>
       <div class="input-with-copy">
         <select id="securityResult">
@@ -93,10 +100,10 @@
           <option>Pass</option>
           <option>Fail</option>
         </select>
-        <button class="copy-btn" data-copy-target="securityResult" aria-label="Copy Security Result">Copy</button>
+        <button class="copy-btn" data-copy-target="securityResult">Copy</button>
       </div>
 
-      <!-- PASS reasons block (shown when Security = Pass) -->
+      <!-- PASS reasons (shown when Pass) -->
       <label id="securityPassLabel" class="hidden">How was security passed?</label>
       <div id="securityPassBlock" class="hidden">
         <div class="checklist">
@@ -109,7 +116,7 @@
         </div>
       </div>
 
-      <!-- FAIL reasons block (shown when Security = Fail) -->
+      <!-- FAIL reasons (shown when Fail) -->
       <label id="securityFailLabel" class="hidden">Why did security fail?</label>
       <div id="securityFailBlock" class="hidden">
         <div class="checklist">
@@ -122,7 +129,7 @@
         </div>
       </div>
 
-      <!-- Relation should be below the pass/fail detail blocks -->
+      <!-- Relation (below pass/fail blocks) -->
       <label for="relation">Your relation to the business</label>
       <div class="input-with-copy">
         <select id="relation">
@@ -133,51 +140,87 @@
           <option>Agent</option>
           <option>Other</option>
         </select>
-        <button class="copy-btn" data-copy-target="relation" aria-label="Copy Relation">Copy</button>
+        <button class="copy-btn" data-copy-target="relation">Copy</button>
       </div>
 
-      <!-- Agent-only block -->
-      <div class="agent-only">
-        <label for="agencyName">Agency name</label>
+      <!-- Agent-only fields (hidden by default; shown when Relation = Agent) -->
+      <div id="agentBlock" class="agent-only">
+        <label for="agencyName">Agent company name</label>
         <div class="input-with-copy">
           <input id="agencyName" type="text" placeholder="Agent company name" />
-          <button class="copy-btn" data-copy-target="agencyName" aria-label="Copy Agency Name">Copy</button>
+          <button class="copy-btn" data-copy-target="agencyName">Copy</button>
         </div>
 
         <label for="agencyAddress">Agency address</label>
         <div class="input-with-copy">
           <input id="agencyAddress" type="text" placeholder="Agent address" />
-          <button class="copy-btn" data-copy-target="agencyAddress" aria-label="Copy Agency Address">Copy</button>
+          <button class="copy-btn" data-copy-target="agencyAddress">Copy</button>
         </div>
 
         <label for="agentRef">Agent Ref</label>
         <div class="input-with-copy">
           <input id="agentRef" type="text" placeholder="Agent reference" />
-          <button class="copy-btn" data-copy-target="agentRef" aria-label="Copy Agent Ref">Copy</button>
+          <button class="copy-btn" data-copy-target="agentRef">Copy</button>
         </div>
       </div>
 
+      <!-- Caller & Phone -->
       <label for="callerName">Caller Name</label>
       <div class="input-with-copy">
         <input id="callerName" type="text" placeholder="Person you are speaking to" />
-        <button class="copy-btn" data-copy-target="callerName" aria-label="Copy Caller Name">Copy</button>
+        <button class="copy-btn" data-copy-target="callerName">Copy</button>
       </div>
 
-      <label for="phoneNumber">Phone number</label>
+      <label for="phoneNumber">Phone Number</label>
       <div class="input-with-copy">
         <input id="phoneNumber" type="tel" placeholder="e.g., +44 1234 567890" />
-        <button class="copy-btn" data-copy-target="phoneNumber" aria-label="Copy Phone Number">Copy</button>
+        <button class="copy-btn" data-copy-target="phoneNumber">Copy</button>
       </div>
 
+      <!-- Quick Templates (Progress-chasing) -->
+      <label for="briefTemplateSelect">Quick Template (Progress chasing)</label>
+      <div class="template-row">
+        <select id="briefTemplateSelect">
+          <option value="">— Select template —</option>
+          <option>Deceased Traders (Bereavement)</option>
+          <option>Default Surcharge</option>
+          <option>De-Registration</option>
+          <option>DIY</option>
+          <option>Error Correction</option>
+          <option>FRS - Flat Rate Scheme</option>
+          <option>Group Amendments</option>
+          <option>IRU form</option>
+          <option>Variations</option>
+          <option>VAT Ledger Breakdown</option>
+          <option>VAT Written Enquiry</option>
+          <option>VAT 68 (COLE/TOGC)</option>
+          <option>VAT915</option>
+          <option>64-8 processing</option>
+          <option>Payment Allocation (IPP)</option>
+          <option>Penalty appeals</option>
+          <option>Registration</option>
+          <option>Reinstatements</option>
+          <option>Repayment</option>
+          <option>Tracing Unit 309</option>
+        </select>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="briefTemplateAppend" />
+          Append
+        </label>
+        <button id="applyTemplateBtn" class="primary" type="button">Insert</button>
+        <button id="clearTemplateBtn" class="secondary" type="button">Clear</button>
+      </div>
+
+      <!-- Brief -->
       <label for="brief">Brief — What they wanted? What you did?</label>
       <div class="input-with-copy">
-        <textarea id="brief" rows="3" placeholder="Short summary of request and actions taken"></textarea>
-        <button class="copy-btn" data-copy-target="brief" aria-label="Copy Brief">Copy</button>
+        <textarea id="brief" rows="4" placeholder="Short summary of request and actions taken"></textarea>
+        <button class="copy-btn" data-copy-target="brief">Copy</button>
       </div>
     </div>
 
     <div class="actions">
-      <button id="resetBtn" class="secondary">Reset Call</button>
+      <button id="resetBtn" class="secondary" type="button">Reset Call</button>
     </div>
     <p class="small">Reset clears the call fields and notes. Settings stay intact.</p>
   </section>
@@ -200,10 +243,10 @@
       <div class="note-header">
         <h3>AUI Note (simplified)</h3>
         <div class="note-actions">
-          <button class="copy-note" data-note="sap">Copy AUI Note</button>
+          <button class="copy-note" data-note="aui">Copy AUI Note</button>
         </div>
       </div>
-      <textarea id="sapNote" rows="8" readonly class="mono"></textarea>
+      <textarea id="auiNote" rows="8" readonly class="mono"></textarea>
     </div>
 
     <p class="small">
@@ -215,9 +258,7 @@
     <p>Made for local use — no data leaves your browser.</p>
   </footer>
 
+  <!-- Correct script tag -->
   <script src="script.js"></script>
 </body>
 </html>
-``
-
-
