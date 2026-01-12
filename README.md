@@ -2,7 +2,9 @@
 Note taking tool for AOs in VAT
 
 VAT Helpline – Quality Notes Tool
+
 Overview
+
 The VAT Helpline Quality Notes Tool is a lightweight, browser-based application designed for administrative officers handling VAT-related calls. It streamlines note-taking during customer interactions, ensuring compliance, accuracy, and speed without relying on external servers. Built with HTML, CSS, and vanilla JavaScript, this tool runs entirely locally for maximum security.
 
 Key Features
