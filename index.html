@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VAT Helpline – Quality Notes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>VAT Helpline – Quality Notes</h1>
+    <p class="subtitle">VAT Helpline — QN</p>
+  </header>
+
+  <!-- Intro/Info bubble -->
+  <section class="card">
+    <details id="introDetails" open>
+      <summary class="details-summary">📘 Intro / Info</summary>
+      <div class="details-content">
+        <p><strong>Opening:</strong></p>
+        <p>
+          Hello, you on a VAT help line, you talking to
+          <span id="introOfficerName">[Name]</span>.<br />
+          Can I start with taking your VAT number please?
+        </p>
+        <p class="hint">Tip: Update your name in <em>Settings</em> so it appears here.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- Settings (persist via localStorage) -->
+  <section class="card">
+    <details id="settingsDetails">
+      <summary class="details-summary">⚙️ Settings</summary>
+      <div class="details-content">
+        <div class="grid">
+          <label for="officerName">Your Name</label>
+          <div>
+            <input id="officerName" type="text" placeholder="e.g., Norbert Bercsenyi" />
+          </div>
+
+          <label for="ccelRef">CCEL Ref</label>
+          <div>
+            <input id="ccelRef" type="text" placeholder="e.g., CCEL-123456" />
+          </div>
+        </div>
+        <p class="small">Settings are auto-saved and persist across sessions. Reset does not clear settings.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- Call Intake -->
+  <section class="card">
+    <h2>📝 Call Intake</h2>
+    <div class="grid">
+      <label for="vrn">VRN (VAT Registration Number)</label>
+      <div class="input-with-copy">
+        <input id="vrn" type="text" inputmode="numeric" placeholder="e.g., 123456789" />
+        <button class="copy-btn" data-copy-target="vrn" aria-label="Copy VRN">Copy</button>
+      </div>
+
+      <label for="businessName">Business Name</label>
+      <div class="input-with-copy">
+        <input id="businessName" type="text" placeholder="Registered business name" />
+        <button class="copy-btn" data-copy-target="businessName" aria-label="Copy Business Name">Copy</button>
+      </div>
+
+      <label for="addressLine">First line of address</label>
+      <div class="input-with-copy">
+        <input id="addressLine" type="text" placeholder="e.g., 1 Example Street" />
+        <button class="copy-btn" data-copy-target="addressLine" aria-label="Copy Address Line">Copy</button>
+      </div>
+
+      <label for="postcode">Postcode</label>
+      <div class="input-with-copy">
+        <input id="postcode" type="text" placeholder="e.g., G1 2AB" />
+        <button class="copy-btn" data-copy-target="postcode" aria-label="Copy Postcode">Copy</button>
+      </div>
+
+      <!-- Security + indicator -->
+      <label for="securityResult" class="security-label">
+        Security
+        <span id="securityIndicator"
+              class="sec-indicator warn"
+              role="img"
+              aria-label="Security not passed"
+              title="Security not passed">✖</span>
+      </label>
+      <div class="input-with-copy">
+        <select id="securityResult">
+          <option value="">— Select —</option>
+          <option>Pass</option>
+          <option>Fail</option>
+        </select>
+        <button class="copy-btn" data-copy-target="securityResult" aria-label="Copy Security Result">Copy</button>
+      </div>
+
+      <!-- PASS reasons block (shown when Security = Pass) -->
+      <label id="securityPassLabel" class="hidden">How was security passed?</label>
+      <div id="securityPassBlock" class="hidden">
+        <div class="checklist">
+          <label><input type="checkbox" id="sec_pass_box5" /> Security PASSED box five figure confirmed.</label>
+          <label><input type="checkbox" id="sec_pass_edr" /> Security PASSED EDR confirmed.</label>
+          <label><input type="checkbox" id="sec_pass_arn" /> Security PASSED ARN confirmed.</label>
+          <label><input type="checkbox" id="sec_pass_64_8" /> Security PASSED via vat form 64-8.</label>
+          <label><input type="checkbox" id="sec_pass_agent_other" /> Security PASSED agent unable to confirm ARN but confirmed answer to other questions about account.</label>
+          <label><input type="checkbox" id="sec_pass_eis" /> Security PASSED via EIS reference</label>
+        </div>
+      </div>
+
+      <!-- FAIL reasons block (shown when Security = Fail) -->
+      <label id="securityFailLabel" class="hidden">Why did security fail?</label>
+      <div id="securityFailBlock" class="hidden">
+        <div class="checklist">
+          <label><input type="checkbox" id="sec_fail_box5" /> Security FAILED unable to confirm box 5 figure.</label>
+          <label><input type="checkbox" id="sec_fail_edr" /> Security FAILED unable to confirm EDR.</label>
+          <label><input type="checkbox" id="sec_fail_vrn" /> Security FAILED unable to confirm VRN.</label>
+          <label><input type="checkbox" id="sec_fail_agent_not_auth" /> Security FAILED agent not authorised.</label>
+          <label><input type="checkbox" id="sec_fail_not_auth" /> Security FAILED not authorised.</label>
+          <label><input type="checkbox" id="sec_fail_agent_ref_other" /> Security FAILED agent unable to confirm agent ref or answer other questions about account.</label>
+        </div>
+      </div>
+
+      <!-- Relation should be below the pass/fail detail blocks -->
+      <label for="relation">Your relation to the business</label>
+      <div class="input-with-copy">
+        <select id="relation">
+          <option value="">— Select —</option>
+          <option>Owner</option>
+          <option>Director</option>
+          <option>Employee</option>
+          <option>Agent</option>
+          <option>Other</option>
+        </select>
+        <button class="copy-btn" data-copy-target="relation" aria-label="Copy Relation">Copy</button>
+      </div>
+
+      <!-- Agent-only block -->
+      <div class="agent-only">
+        <label for="agencyName">Agency name</label>
+        <div class="input-with-copy">
+          <input id="agencyName" type="text" placeholder="Agent company name" />
+          <button class="copy-btn" data-copy-target="agencyName" aria-label="Copy Agency Name">Copy</button>
+        </div>
+
+        <label for="agencyAddress">Agency address</label>
+        <div class="input-with-copy">
+          <input id="agencyAddress" type="text" placeholder="Agent address" />
+          <button class="copy-btn" data-copy-target="agencyAddress" aria-label="Copy Agency Address">Copy</button>
+        </div>
+
+        <label for="agentRef">Agent Ref</label>
+        <div class="input-with-copy">
+          <input id="agentRef" type="text" placeholder="Agent reference" />
+          <button class="copy-btn" data-copy-target="agentRef" aria-label="Copy Agent Ref">Copy</button>
+        </div>
+      </div>
+
+      <label for="callerName">Caller Name</label>
+      <div class="input-with-copy">
+        <input id="callerName" type="text" placeholder="Person you are speaking to" />
+        <button class="copy-btn" data-copy-target="callerName" aria-label="Copy Caller Name">Copy</button>
+      </div>
+
+      <label for="phoneNumber">Phone number</label>
+      <div class="input-with-copy">
+        <input id="phoneNumber" type="tel" placeholder="e.g., +44 1234 567890" />
+        <button class="copy-btn" data-copy-target="phoneNumber" aria-label="Copy Phone Number">Copy</button>
+      </div>
+
+      <label for="brief">Brief — What they wanted? What you did?</label>
+      <div class="input-with-copy">
+        <textarea id="brief" rows="3" placeholder="Short summary of request and actions taken"></textarea>
+        <button class="copy-btn" data-copy-target="brief" aria-label="Copy Brief">Copy</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="resetBtn" class="secondary">Reset Call</button>
+    </div>
+    <p class="small">Reset clears the call fields and notes. Settings stay intact.</p>
+  </section>
+
+  <!-- Notes Output -->
+  <section class="card">
+    <h2>🧾 Notes</h2>
+
+    <div class="note-block">
+      <div class="note-header">
+        <h3>CCEL Note (detailed)</h3>
+        <div class="note-actions">
+          <button class="copy-note" data-note="ccel">Copy CCEL Note</button>
+        </div>
+      </div>
+      <textarea id="ccelNote" rows="10" readonly class="mono"></textarea>
+    </div>
+
+    <div class="note-block">
+      <div class="note-header">
+        <h3>SAP Note (simplified)</h3>
+        <div class="note-actions">
+          <button class="copy-note" data-note="sap">Copy SAP Note</button>
+        </div>
+      </div>
+      <textarea id="sapNote" rows="8" readonly class="mono"></textarea>
+    </div>
+
+    <p class="small">
+      All calls are digitally recorded. To request a copy of this call please email <strong>DL-CC Head Office Quality</strong>.
+    </p>
+  </section>
+
+  <footer class="app-footer">
+    <p>Made for local use — no data leaves your browser.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+``
