@@ -13,6 +13,7 @@
 }
 
 * { box-sizing: border-box; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -21,6 +22,7 @@ html, body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
 }
 
+/* Header */
 .app-header {
   padding: 24px 20px 12px;
   border-bottom: 1px solid var(--border);
@@ -28,6 +30,7 @@ html, body {
 .app-header h1 { margin: 0; font-size: 1.6rem; }
 .subtitle { margin: 6px 0 0; color: var(--muted); }
 
+/* Card */
 .card {
   margin: 16px 20px;
   padding: 16px;
@@ -36,22 +39,20 @@ html, body {
   border-radius: var(--radius);
 }
 
+/* Details (collapsible sections) */
 details > summary.details-summary {
   cursor: pointer;
   font-weight: 600;
   list-style: none;
 }
 details > summary.details-summary::-webkit-details-marker { display: none; }
-.details-summary::after {
-  content: "▾";
-  margin-left: 8px;
-  color: var(--muted);
-}
+.details-summary::after { content: "▾"; margin-left: 8px; color: var(--muted); }
 details[open] > summary.details-summary::after { content: "▴"; }
 .details-summary:hover { color: var(--accent); }
 .details-content { margin-top: 8px; }
 .hint { color: var(--muted); font-size: 0.9rem; }
 
+/* Grid layout for form rows */
 .grid {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -60,6 +61,7 @@ details[open] > summary.details-summary::after { content: "▴"; }
 }
 .grid label { color: var(--muted); }
 
+/* Inputs */
 input, select, textarea {
   width: 100%;
   padding: 10px;
@@ -71,6 +73,7 @@ input, select, textarea {
 }
 input::placeholder, textarea::placeholder { color: #6f7885; }
 
+/* Input + Copy button row */
 .input-with-copy {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -78,7 +81,8 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
   align-items: center;
 }
 
-.copy-btn, .copy-note, .secondary {
+/* Buttons */
+.copy-btn, .copy-note, .secondary, .primary {
   padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid var(--border);
@@ -86,12 +90,16 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
   color: var(--text);
   cursor: pointer;
 }
-.copy-btn:hover, .copy-note:hover { border-color: var(--accent); color: var(--accent); }
+.copy-btn:hover, .copy-note:hover, .primary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 .secondary { color: var(--muted); }
 .secondary:hover { color: var(--danger); border-color: var(--danger); }
 
 .actions { margin-top: 12px; }
 
+/* Notes area */
 .note-block { margin-top: 12px; }
 .note-header {
   display: flex;
@@ -99,13 +107,11 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
   align-items: center;
 }
 .note-actions button { margin-left: 8px; }
-.mono {
-  font-family: var(--mono);
-  white-space: pre-wrap;
-}
+.mono { font-family: var(--mono); white-space: pre-wrap; }
 
 .small { font-size: 0.9rem; color: var(--muted); }
 
+/* Footer */
 .app-footer {
   padding: 16px 20px 24px;
   color: var(--muted);
@@ -113,7 +119,8 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
 }
 
 /* Conditional blocks */
-.agent-only { display: contents; }
+.agent-only { display: none; }      /* default: hidden */
+.agent-only.show { display: contents; } /* shown when JS adds .show */
 .hidden { display: none !important; }
 
 /* Checklist styling */
@@ -142,16 +149,25 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
   border: 1px solid var(--border);
   user-select: none;
 }
-.sec-indicator.warn {
-  background: var(--danger);
-  color: #0c0f14;
+.sec-indicator.warn { background: var(--danger); color: #0c0f14; }
+.sec-indicator.ok   { background: var(--accent-2); color: #0c0f14; }
+
+/* Brief templates row */
+.template-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 8px;
+  align-items: center;
 }
-.sec-indicator.ok {
-  background: var(--accent-2);
-  color: #0c0f14;
+.checkbox-inline {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--muted);
 }
 
 /* Responsive */
 @media (max-width: 700px) {
   .grid { grid-template-columns: 1fr; }
+  .template-row { grid-template-columns: 1fr auto auto; }
 }
