@@ -11,9 +11,7 @@
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   --radius: 10px;
 }
-
 * { box-sizing: border-box; }
-
 html, body {
   margin: 0;
   padding: 0;
@@ -96,7 +94,6 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
 }
 .secondary { color: var(--muted); }
 .secondary:hover { color: var(--danger); border-color: var(--danger); }
-
 .actions { margin-top: 12px; }
 
 /* Notes area */
@@ -108,7 +105,6 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
 }
 .note-actions button { margin-left: 8px; }
 .mono { font-family: var(--mono); white-space: pre-wrap; }
-
 .small { font-size: 0.9rem; color: var(--muted); }
 
 /* Footer */
@@ -119,7 +115,7 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
 }
 
 /* Conditional blocks */
-.agent-only { display: none; }      /* default: hidden */
+.agent-only { display: none; } /* default: hidden */
 .agent-only.show { display: contents; } /* shown when JS adds .show */
 .hidden { display: none !important; }
 
@@ -150,7 +146,7 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
   user-select: none;
 }
 .sec-indicator.warn { background: var(--danger); color: #0c0f14; }
-.sec-indicator.ok   { background: var(--accent-2); color: #0c0f14; }
+.sec-indicator.ok { background: var(--accent-2); color: #0c0f14; }
 
 /* Brief templates row */
 .template-row {
@@ -166,8 +162,33 @@ input::placeholder, textarea::placeholder { color: #6f7885; }
   color: var(--muted);
 }
 
+/* Settings helpers */
+.settings-inline {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+/* CCEL row (Prefix + Number stepper) */
+.ccel-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.stepper {
+  display: grid;
+  grid-template-columns: 1fr auto auto; /* number | – | + */
+  gap: 8px;
+  align-items: center;
+}
+.stepper .primary, .stepper .secondary {
+  min-width: 40px;
+}
+
 /* Responsive */
 @media (max-width: 700px) {
   .grid { grid-template-columns: 1fr; }
   .template-row { grid-template-columns: 1fr auto auto; }
+  .ccel-row { grid-template-columns: 1fr; }
 }
