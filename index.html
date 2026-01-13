@@ -5,7 +5,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>VAT Helpline – Quality Notes</title>
-  <!-- Correct stylesheet link -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -36,17 +35,55 @@
       <summary class="details-summary">⚙️ Settings</summary>
       <div class="details-content">
         <div class="grid">
+          <!-- Name -->
           <label for="officerName">Your Name</label>
           <div>
             <input id="officerName" type="text" placeholder="Your name" />
           </div>
 
-          <label for="ccelRef">CCEL Ref</label>
+          <!-- CCEL: Prefix + Number (+/-) -->
+          <label for="ccelPrefix">CCEL Ref</label>
           <div>
-            <input id="ccelRef" type="text" placeholder="e.g., CCEL-123456" />
+            <div class="ccel-row">
+              <input id="ccelPrefix" type="text" placeholder="Prefix e.g., CCEL-" />
+              <div class="stepper">
+                <input id="ccelNumber" type="number" inputmode="numeric" step="1" min="0" placeholder="1234" />
+                <button id="ccelNumDec" type="button" class="secondary" title="Decrease">–</button>
+                <button id="ccelNumInc" type="button" class="primary" title="Increase">+</button>
+              </div>
+            </div>
+            <p class="small">CCEL is built as <code>PREFIX1234</code> (no hyphen). Use – and + to adjust the number by one.</p>
+          </div>
+
+          <!-- Webchat ID + include -->
+          <label for="webchatId">Webchat ID</label>
+          <div>
+            <div class="settings-inline">
+              <input id="webchatId" type="text" placeholder="Optional Webchat ID" />
+              <label class="checkbox-inline">
+                <input type="checkbox" id="includeWebchatId" /> Include in notes
+              </label>
+            </div>
+          </div>
+
+          <!-- AUI Ext + include -->
+          <label for="auiExt">AUI Ext</label>
+          <div>
+            <div class="settings-inline">
+              <input id="auiExt" type="text" placeholder="Optional AUI extension" />
+              <label class="checkbox-inline">
+                <input type="checkbox" id="includeAuiExt" /> Include in notes
+              </label>
+            </div>
           </div>
         </div>
-        <p class="small">Settings are auto-saved and persist across sessions. Reset does not clear settings.</p>
+
+        <!-- Reset Settings -->
+        <div class="actions">
+          <button id="resetSettingsBtn" class="secondary" type="button">Reset Settings</button>
+        </div>
+
+        <p class="small">Settings are auto-saved and persist across sessions. Reset Call does not clear settings.</p>
       </div>
     </details>
   </section>
@@ -55,35 +92,75 @@
   <section class="card">
     <h2>📝 Call Intake</h2>
     <div class="grid">
-      <!-- VRN -->
+      <!-- 1. VRN -->
       <label for="vrn">VRN (VAT Registration Number)</label>
       <div class="input-with-copy">
         <input id="vrn" type="text" inputmode="numeric" placeholder="e.g., 123456789" />
         <button class="copy-btn" data-copy-target="vrn">Copy</button>
       </div>
 
-      <!-- Business -->
+      <!-- 2. Business Name -->
       <label for="businessName">Business Name</label>
       <div class="input-with-copy">
         <input id="businessName" type="text" placeholder="Registered business name" />
         <button class="copy-btn" data-copy-target="businessName">Copy</button>
       </div>
 
-      <!-- Address -->
-      <label for="addressLine">First line of address</label>
+      <!-- 3. Relation -->
+      <label for="relation">Your relation to the business</label>
       <div class="input-with-copy">
-        <input id="addressLine" type="text" placeholder="e.g., 1 Example Street" />
-        <button class="copy-btn" data-copy-target="addressLine">Copy</button>
+        <select id="relation">
+          <option value="">— Select —</option>
+          <option>Owner</option>
+          <option>Director</option>
+          <option>Employee</option>
+          <option>Agent</option>
+          <option>Other</option>
+        </select>
+        <button class="copy-btn" data-copy-target="relation">Copy</button>
       </div>
 
-      <!-- Postcode -->
-      <label for="postcode">Postcode</label>
-      <div class="input-with-copy">
-        <input id="postcode" type="text" placeholder="e.g., G1 2AB" />
-        <button class="copy-btn" data-copy-target="postcode">Copy</button>
+      <!-- Specify when Relation = Other -->
+      <label for="relationOther" id="relationOtherLabel" class="hidden">Specify relation</label>
+      <div id="relationOtherBlock" class="hidden input-with-copy">
+        <input id="relationOther" type="text" placeholder="e.g., Supplier, Landlord, Consultant…" />
+        <button class="copy-btn" data-copy-target="relationOther">Copy</button>
       </div>
 
-      <!-- Security + indicator -->
+      <!-- Agent-only block -->
+      <div id="agentBlock" class="agent-only">
+        <label for="agencyName">Agent company name</label>
+        <div class="input-with-copy">
+          <input id="agencyName" type="text" placeholder="Agent company name" />
+          <button class="copy-btn" data-copy-target="agencyName">Copy</button>
+        </div>
+        <label for="agencyAddress">Agency address</label>
+        <div class="input-with-copy">
+          <input id="agencyAddress" type="text" placeholder="Agent address" />
+          <button class="copy-btn" data-copy-target="agencyAddress">Copy</button>
+        </div>
+        <label for="agentRef">Agent Ref</label>
+        <div class="input-with-copy">
+          <input id="agentRef" type="text" placeholder="Agent reference" />
+          <button class="copy-btn" data-copy-target="agentRef">Copy</button>
+        </div>
+      </div>
+
+      <!-- 4. Caller Name -->
+      <label for="callerName">Caller Name</label>
+      <div class="input-with-copy">
+        <input id="callerName" type="text" placeholder="Person you are speaking to" />
+        <button class="copy-btn" data-copy-target="callerName">Copy</button>
+      </div>
+
+      <!-- 5. Phone Number -->
+      <label for="phoneNumber">Phone Number</label>
+      <div class="input-with-copy">
+        <input id="phoneNumber" type="tel" placeholder="e.g., +44 1234 567890" />
+        <button class="copy-btn" data-copy-target="phoneNumber">Copy</button>
+      </div>
+
+      <!-- 6. Security + indicator -->
       <label for="securityResult" class="security-label">
         Security
         <span
@@ -103,7 +180,7 @@
         <button class="copy-btn" data-copy-target="securityResult">Copy</button>
       </div>
 
-      <!-- PASS reasons (shown when Pass) -->
+      <!-- PASS reasons -->
       <label id="securityPassLabel" class="hidden">How was security passed?</label>
       <div id="securityPassBlock" class="hidden">
         <div class="checklist">
@@ -116,7 +193,7 @@
         </div>
       </div>
 
-      <!-- FAIL reasons (shown when Fail) -->
+      <!-- FAIL reasons -->
       <label id="securityFailLabel" class="hidden">Why did security fail?</label>
       <div id="securityFailBlock" class="hidden">
         <div class="checklist">
@@ -129,55 +206,7 @@
         </div>
       </div>
 
-      <!-- Relation (below pass/fail blocks) -->
-      <label for="relation">Your relation to the business</label>
-      <div class="input-with-copy">
-        <select id="relation">
-          <option value="">— Select —</option>
-          <option>Owner</option>
-          <option>Director</option>
-          <option>Employee</option>
-          <option>Agent</option>
-          <option>Other</option>
-        </select>
-        <button class="copy-btn" data-copy-target="relation">Copy</button>
-      </div>
-
-      <!-- Agent-only fields (hidden by default; shown when Relation = Agent) -->
-      <div id="agentBlock" class="agent-only">
-        <label for="agencyName">Agent company name</label>
-        <div class="input-with-copy">
-          <input id="agencyName" type="text" placeholder="Agent company name" />
-          <button class="copy-btn" data-copy-target="agencyName">Copy</button>
-        </div>
-
-        <label for="agencyAddress">Agency address</label>
-        <div class="input-with-copy">
-          <input id="agencyAddress" type="text" placeholder="Agent address" />
-          <button class="copy-btn" data-copy-target="agencyAddress">Copy</button>
-        </div>
-
-        <label for="agentRef">Agent Ref</label>
-        <div class="input-with-copy">
-          <input id="agentRef" type="text" placeholder="Agent reference" />
-          <button class="copy-btn" data-copy-target="agentRef">Copy</button>
-        </div>
-      </div>
-
-      <!-- Caller & Phone -->
-      <label for="callerName">Caller Name</label>
-      <div class="input-with-copy">
-        <input id="callerName" type="text" placeholder="Person you are speaking to" />
-        <button class="copy-btn" data-copy-target="callerName">Copy</button>
-      </div>
-
-      <label for="phoneNumber">Phone Number</label>
-      <div class="input-with-copy">
-        <input id="phoneNumber" type="tel" placeholder="e.g., +44 1234 567890" />
-        <button class="copy-btn" data-copy-target="phoneNumber">Copy</button>
-      </div>
-
-      <!-- Quick Templates (Progress-chasing) -->
+      <!-- 7. Quick Templates (Progress-chasing) -->
       <label for="briefTemplateSelect">Quick Template (Progress chasing)</label>
       <div class="template-row">
         <select id="briefTemplateSelect">
@@ -211,7 +240,7 @@
         <button id="clearTemplateBtn" class="secondary" type="button">Clear</button>
       </div>
 
-      <!-- Brief -->
+      <!-- 8. Brief -->
       <label for="brief">Brief — What they wanted? What you did?</label>
       <div class="input-with-copy">
         <textarea id="brief" rows="4" placeholder="Short summary of request and actions taken"></textarea>
@@ -258,7 +287,7 @@
     <p>Made for local use — no data leaves your browser.</p>
   </footer>
 
-  <!-- Correct script tag -->
   <script src="script.js"></script>
 </body>
 </html>
+``
