@@ -353,39 +353,30 @@ function buildCcelNote() {
   lines.push(`Phone number: ${val(els.phoneNumber?.value)}`);
   lines.push(buildSecurityLine());
   lines.push("");
-  lines.push("Brief — What they wanted / What you did:");
+  lines.push("Brief — What they wanted / What I did:");
   lines.push(val(els.brief?.value));
   return lines.join("\n");
 }
+
 
 function buildAuiNote() {
   const lines = [];
-  lines.push("All calls are digitally recorded. To request a copy of this call please email DL-CC Head Office Quality.");
-  lines.push("");
+
+  // Only the three items requested
+  lines.push(`VRN: ${val(els.vrn?.value, "N/A")}`);
 
   const ccel = val(getCcelRef(), "N/A");
-  let relation = val(els.relation?.value, "N/A");
-  if ((els.relation?.value || "") === "Other" && els.relationOther?.value) {
-    relation = `Other — ${els.relationOther.value.trim()}`;
+  lines.push(`CCEL: ${ccel}`);
+
+  // Respect the "Include in notes" toggle for AUI Ext
+  const includeAui = !!els.includeAuiExt?.checked && val(els.auiExt?.value, "");
+  if (includeAui) {
+    lines.push(`AUI Ext: ${els.auiExt.value.trim()}`);
   }
 
-  lines.push(`VRN: ${val(els.vrn?.value, "N/A")}  |  CCEL: ${ccel}`);
-  lines.push(`Name: ${val(els.callerName?.value)} (${relation})`);
-  lines.push(`Business: ${val(els.businessName?.value)}`);
-  lines.push(buildSecurityLine());
-  lines.push(`Phone: ${val(els.phoneNumber?.value)}`);
-
-  // Optional Settings-based identifiers
-  const includeW = !!els.includeWebchatId?.checked && val(els.webchatId?.value, "");
-  const includeA = !!els.includeAuiExt?.checked && val(els.auiExt?.value, "");
-  if (includeW) lines.push(`Webchat ID: ${els.webchatId.value.trim()}`);
-  if (includeA) lines.push(`AUI Ext: ${els.auiExt.value.trim()}`);
-
-  lines.push("");
-  lines.push("Brief:");
-  lines.push(val(els.brief?.value));
-  return lines.join("\n");
+  return lines.join("  |  ");
 }
+
 
 function updateNotes() {
   ccelNoteOut && (ccelNoteOut.value = buildCcelNote());
