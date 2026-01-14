@@ -238,26 +238,26 @@ function updateSecurityDetailsBlocks() {
 
 // ---------- Brief Templates (Progress-chasing) ----------
 const briefTemplates = {
-  "Deceased Traders (Bereavement)": "Caller is progress-chasing a bereavement case. Checked CCEL/SAP; advised current status and expected next steps/timeframe.",
+  "Deceased Traders (Bereavement)": "Caller is progress-chasing a bereavement case. Checked CCEL/SAP; advised current status and expected next steps.",
   "Default Surcharge": "Caller is progress-chasing a default surcharge notice. Reviewed ledger/penalty records; advised current status and next steps.",
-  "De-Registration": "Caller is progress-chasing a VAT de-registration request. Checked submission status; advised effective date/timeline and actions if delayed.",
-  "DIY": "Caller is progress-chasing a DIY scheme application/claim. Confirmed receipt/processing stage; advised expected outcome timeframe.",
+  "De-Registration": "Caller is progress-chasing a VAT de-registration request. Checked submission status; advised ",
+  "DIY": "Caller is progress-chasing a DIY scheme application/claim. Confirmed receipt/processing stage; advised ",
   "Error Correction": "Caller is progress-chasing an error correction (VAT652). Checked receipt and workflow stage; advised response timeline and any further info needed.",
-  "FRS - Flat Rate Scheme": "Caller is progress-chasing a Flat Rate Scheme application/exit. Verified current status; advised next steps and timing.",
-  "Group Amendments": "Caller is progress-chasing VAT group amendments. Checked system updates; advised processing status and when changes take effect.",
+  "FRS - Flat Rate Scheme": "Caller is progress-chasing a Flat Rate Scheme application/exit. Verified current status; advised next steps and ",
+  "Group Amendments": "Caller is progress-chasing VAT group amendments. Checked system updates; advised processing status and ",
   "IRU form": "Caller is progress-chasing an IRU form submission. Confirmed receipt; advised current stage and expected follow-up.",
   "Variations": "Caller is progress-chasing a variation request. Reviewed case progress; advised status and next steps.",
   "VAT Ledger Breakdown": "Caller is progress-chasing a VAT ledger breakdown. Checked ledger movements; advised when breakdown will be available/issued.",
-  "VAT Written Enquiry": "Caller is progress-chasing a written enquiry. Confirmed case in queue; advised response SLA/timeline.",
+  "VAT Written Enquiry": "Caller is progress-chasing a written enquiry. Confirmed case in queue; advised ",
   "VAT 68 (COLE/TOGC)": "Caller is progress-chasing VAT68 for COLE/TOGC. Verified receipt and case routing; advised current status and next steps.",
-  "VAT915": "Caller is progress-chasing a VAT915 submission. Confirmed intake stage; advised expected processing timeframe.",
+  "VAT915": "Caller is progress-chasing a VAT915 submission. Confirmed intake stage; advised ",
   "64-8 processing": "Caller is progress-chasing 64-8 (agent authorisation) processing. Checked authorisation status; advised when access will be active.",
-  "Payment Allocation (IPP)": "Caller is progress-chasing payment allocation (IPP). Reviewed allocation status; advised reconciliation steps and timeline.",
+  "Payment Allocation (IPP)": "Caller is progress-chasing payment allocation (IPP). Reviewed allocation status; advised reconciliation steps and ",
   "Penalty appeals": "Caller is progress-chasing a penalty appeal. Checked appeal status; advised expected review/decision timeframe.",
-  "Registration": "Caller is progress-chasing VAT registration. Verified application progress; advised next steps and expected effective date.",
-  "Reinstatements": "Caller is progress-chasing a reinstatement request. Confirmed current status; advised actions/timing.",
-  "Repayment": "Caller is progress-chasing a repayment claim. Checked claim status; advised expected payment date and any holds.",
-  "Tracing Unit 309": "Caller is progress-chasing a Tracing Unit (309) case. Verified investigation status; advised next steps/timeline.",
+  "Registration": "Caller is progress-chasing VAT registration. Checked application progress; advised ",
+  "Reinstatements": "Caller is progress-chasing a reinstatement request. Confirmed current status; advised ",
+  "Repayment": "Caller is progress-chasing a repayment claim. Checked claim status; advised ",
+  "Tracing Unit 309": "Caller is progress-chasing a Tracing Unit (309) case. Verified investigation status; advised ",
 };
 
 function buildBriefContextLine() {
@@ -523,4 +523,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // Reset Settings
   resetSettingsBtn?.addEventListener("click", resetSettings);
 });
+
 
