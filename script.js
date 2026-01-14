@@ -281,9 +281,7 @@ function buildBriefContextLine() {
 function insertBriefTemplate(topic, append = false) {
   const tpl = briefTemplates[topic];
   if (!tpl || !els.brief) return;
-  const ctx = buildBriefContextLine();
-  const actions = "Actions taken: ";
-  const text = [tpl, ctx, actions].filter(Boolean).join("\n");
+  const text = tpl; // Only insert template text
   if (append && els.brief.value.trim()) {
     els.brief.value = `${els.brief.value.trim()}\n\n${text}`;
   } else {
@@ -523,5 +521,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Reset Settings
   resetSettingsBtn?.addEventListener("click", resetSettings);
 });
+
 
 
