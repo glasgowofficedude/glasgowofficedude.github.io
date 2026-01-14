@@ -358,23 +358,20 @@ function buildCcelNote() {
   return lines.join("\n");
 }
 
-
 function buildAuiNote() {
   const lines = [];
-
-  // Only the three items requested
   lines.push(`VRN: ${val(els.vrn?.value, "N/A")}`);
-
   const ccel = val(getCcelRef(), "N/A");
   lines.push(`CCEL: ${ccel}`);
-
-  // Respect the "Include in notes" toggle for AUI Ext
+  const includeWebchat = !!els.includeWebchatId?.checked && val(els.webchatId?.value, "");
+  if (includeWebchat) {
+    lines.push(`Webchat ID: ${els.webchatId.value.trim()}`);
+  }
   const includeAui = !!els.includeAuiExt?.checked && val(els.auiExt?.value, "");
   if (includeAui) {
     lines.push(`AUI Ext: ${els.auiExt.value.trim()}`);
   }
-
-  return lines.join("  |  ");
+  return lines.join("\n");
 }
 
 
@@ -526,3 +523,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Reset Settings
   resetSettingsBtn?.addEventListener("click", resetSettings);
 });
+
