@@ -107,7 +107,7 @@
       </div>
 
       <!-- 3. Relation -->
-      <label for="relation">They relation to the business</label>
+      <label for="relation">Your relation to the business</label>
       <div class="input-with-copy">
         <select id="relation">
           <option value="">— Select —</option>
@@ -206,39 +206,42 @@
         </div>
       </div>
 
-      <!-- 7. Quick Templates (Progress-chasing) -->
-      <label for="briefTemplateSelect">Quick Template</label>
-      <div class="template-row">
-        <select id="briefTemplateSelect">
-          <option value="">— Select template —</option>
-          <option>Deceased Traders (Bereavement)</option>
-          <option>Default Surcharge</option>
-          <option>De-Registration</option>
-          <option>DIY</option>
-          <option>Error Correction</option>
-          <option>FRS - Flat Rate Scheme</option>
-          <option>Group Amendments</option>
-          <option>IRU form</option>
-          <option>Variations</option>
-          <option>VAT Ledger Breakdown</option>
-          <option>VAT Written Enquiry</option>
-          <option>VAT 68 (COLE/TOGC)</option>
-          <option>VAT915</option>
-          <option>64-8 processing</option>
-          <option>Payment Allocation (IPP)</option>
-          <option>Penalty appeals</option>
-          <option>Registration</option>
-          <option>Reinstatements</option>
-          <option>Repayment</option>
-          <option>Tracing Unit 309</option>
-        </select>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="briefTemplateAppend" />
-          Append
-        </label>
-        <button id="applyTemplateBtn" class="primary" type="button">Insert</button>
-        <button id="clearTemplateBtn" class="secondary" type="button">Clear</button>
-      </div>
+      
+<!-- 7. Quick Templates -->
+<label for="categorySelect">Quick Template Category</label>
+<div class="template-row">
+  <!-- Category Dropdown -->
+  <select id="categorySelect">
+    <option value="">— Select category —</option>
+    <option value="Progress Chasing">Progress Chasing</option>
+    <option value="Repayment">Repayment</option>
+    <option value="VAT Registration">VAT Registration</option>
+    <option value="Credit release request">Credit release request</option>
+    <option value="PO cancel request">PO cancel request</option>
+    <option value="Ledger quire">Ledger quire</option>
+    <option value="Dept Management">Dept Management</option>
+    <option value="Compromised Accounts">Compromised Accounts</option>
+  </select>
+</div>
+
+<label for="briefTemplateSelect">Quick Template</label>
+<div class="template-row">
+  <!-- Template Dropdown (populated dynamically based on category) -->
+  <select id="briefTemplateSelect">
+    <option value="">— Select template —</option>
+  </select>
+
+  <!-- Append checkbox -->
+  <label class="checkbox-inline">
+    <input type="checkbox" id="briefTemplateAppend" />
+    Append
+  </label>
+
+  <!-- Buttons -->
+  <button id="applyTemplateBtn" class="primary" type="button">Insert</button>
+  <button id="clearTemplateBtn" class="secondary" type="button">Clear</button>
+</div>
+
 
       <!-- 8. Brief -->
       <label for="brief">Brief — What they wanted? What you did?</label>
