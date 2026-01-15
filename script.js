@@ -22,7 +22,6 @@ async function copyText(text) {
     toast("Copy failed.");
   }
 }
-
 let toastTimer;
 function toast(msg) {
   let t = document.getElementById("toast");
@@ -46,7 +45,6 @@ function toast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => (t.style.display = "none"), 1600);
 }
-
 // Safer value helper (always returns a string)
 function val(v, fallback = "—") {
   const s = (v ?? "").toString().trim();
@@ -61,7 +59,6 @@ const els = {
   ccelNumber: document.getElementById("ccelNumber"),
   ccelNumDec: document.getElementById("ccelNumDec"),
   ccelNumInc: document.getElementById("ccelNumInc"),
-
   webchatId: document.getElementById("webchatId"),
   includeWebchatId: document.getElementById("includeWebchatId"),
   auiExt: document.getElementById("auiExt"),
@@ -74,15 +71,16 @@ const els = {
   relationOther: document.getElementById("relationOther"),
   relationOtherLabel: document.getElementById("relationOtherLabel"),
   relationOtherBlock: document.getElementById("relationOtherBlock"),
-
   agencyName: document.getElementById("agencyName"),
   agencyAddress: document.getElementById("agencyAddress"),
   agentRef: document.getElementById("agentRef"),
-
   callerName: document.getElementById("callerName"),
   phoneNumber: document.getElementById("phoneNumber"),
   securityResult: document.getElementById("securityResult"),
   brief: document.getElementById("brief"),
+
+  // Quick Templates (Category + Template)
+  categorySelect: document.getElementById("categorySelect"),
   briefTemplateSelect: document.getElementById("briefTemplateSelect"),
   briefTemplateAppend: document.getElementById("briefTemplateAppend"),
 };
@@ -121,51 +119,45 @@ const failChecks = {
 
 // ---------- Settings persistence ----------
 function loadSettings() {
-  const name = localStorage.getItem("officerName") || "";
-  const prefix = localStorage.getItem("ccelPrefix") || "CCEL-";
+  const name = localStorage.getItem("officerName") ?? "";
+  const prefix = localStorage.getItem("ccelPrefix") ?? "CCEL-";
   const number = localStorage.getItem("ccelNumber") ?? ""; // keep blank if not set
-  const webchatId = localStorage.getItem("webchatId") || "";
-  const auiExt = localStorage.getItem("auiExt") || "";
+  const webchatId = localStorage.getItem("webchatId") ?? "";
+  const auiExt = localStorage.getItem("auiExt") ?? "";
   const includeWebchatId = localStorage.getItem("includeWebchatId") === "1";
   const includeAuiExt = localStorage.getItem("includeAuiExt") === "1";
 
   if (els.officerName) els.officerName.value = name;
-  if (introOfficerName) introOfficerName.textContent = name || "[Name]";
-
+  if (introOfficerName) introOfficerName.textContent = name ?? "[Name]";
   if (els.ccelPrefix) els.ccelPrefix.value = prefix;
   if (els.ccelNumber) els.ccelNumber.value = number;
-
   if (els.webchatId) els.webchatId.value = webchatId;
   if (els.auiExt) els.auiExt.value = auiExt;
   if (els.includeWebchatId) els.includeWebchatId.checked = includeWebchatId;
   if (els.includeAuiExt) els.includeAuiExt.checked = includeAuiExt;
 }
-
 function saveSettings() {
   els.officerName && localStorage.setItem("officerName", els.officerName.value.trim());
-  els.ccelPrefix && localStorage.setItem("ccelPrefix", els.ccelPrefix.value.trim() || "CCEL-");
+  els.ccelPrefix && localStorage.setItem("ccelPrefix", els.ccelPrefix.value.trim() ?? "CCEL-");
   els.ccelNumber && localStorage.setItem("ccelNumber", els.ccelNumber.value.trim());
-
   els.webchatId && localStorage.setItem("webchatId", els.webchatId.value.trim());
   els.auiExt && localStorage.setItem("auiExt", els.auiExt.value.trim());
-
   if (els.includeWebchatId) localStorage.setItem("includeWebchatId", els.includeWebchatId.checked ? "1" : "0");
   if (els.includeAuiExt) localStorage.setItem("includeAuiExt", els.includeAuiExt.checked ? "1" : "0");
-
   if (introOfficerName) introOfficerName.textContent = val(els.officerName?.value, "[Name]");
 }
 
 // Build CCEL from Prefix + Number
 function getCcelRef() {
-  const prefix = (els.ccelPrefix?.value || "").trim();
-  const number = (els.ccelNumber?.value || "").trim();
+  const prefix = (els.ccelPrefix?.value ?? "").trim();
+  const number = (els.ccelNumber?.value ?? "").trim();
   const ref = `${prefix}${number}`;
   return ref.trim();
 }
 
 // ---------- Conditional UI ----------
 function updateAgentFields() {
-  const relation = (els.relation?.value || "");
+  const relation = (els.relation?.value ?? "");
   const isAgent = relation === "Agent";
   const isOther = relation === "Other";
 
@@ -187,9 +179,8 @@ function updateAgentFields() {
   els.relationOtherBlock && els.relationOtherBlock.classList.toggle("hidden", !showOther);
   if (!showOther && els.relationOther) els.relationOther.value = "";
 }
-
 function updateSecurityIndicator() {
-  const valSel = (els.securityResult?.value || "").trim();
+  const valSel = (els.securityResult?.value ?? "").trim();
   if (!securityIndicator) return;
   if (valSel === "Pass") {
     securityIndicator.textContent = "✔";
@@ -205,15 +196,14 @@ function updateSecurityIndicator() {
     securityIndicator.setAttribute("title", "Security not passed");
   }
 }
-
 function clearPassFailSelections() {
   Object.values(passChecks).forEach(cb => cb && (cb.checked = false));
   Object.values(failChecks).forEach(cb => cb && (cb.checked = false));
 }
-
 function updateSecurityDetailsBlocks() {
-  const valSel = (els.securityResult?.value || "").trim();
+  const valSel = (els.securityResult?.value ?? "").trim();
   if (!passLabel || !passBlock || !failLabel || !failBlock) return;
+
   if (valSel === "Pass") {
     passLabel.classList.remove("hidden");
     passBlock.classList.remove("hidden");
@@ -236,41 +226,65 @@ function updateSecurityDetailsBlocks() {
   updateSecurityIndicator();
 }
 
-// ---------- Brief Templates (Progress-chasing) ----------
+// ---------- Brief Templates (Category + Template) ----------
 const briefTemplates = {
-  "Deceased Traders (Bereavement)": "Caller is progress-chasing a bereavement case. Checked CCEL/SAP; advised current status and expected next steps.",
-  "Default Surcharge": "Caller is progress-chasing a default surcharge notice. Reviewed ledger/penalty records; advised current status and next steps.",
-  "De-Registration": "Caller is progress-chasing a VAT de-registration request. Checked submission status; advised ",
-  "DIY": "Caller is progress-chasing a DIY scheme application/claim. Confirmed receipt/processing stage; advised ",
-  "Error Correction": "Caller is progress-chasing an error correction (VAT652). Checked receipt and workflow stage; advised response timeline and any further info needed.",
-  "FRS - Flat Rate Scheme": "Caller is progress-chasing a Flat Rate Scheme application/exit. Verified current status; advised next steps and ",
-  "Group Amendments": "Caller is progress-chasing VAT group amendments. Checked system updates; advised processing status and ",
-  "IRU form": "Caller is progress-chasing an IRU form submission. Confirmed receipt; advised current stage and expected follow-up.",
-  "Variations": "Caller is progress-chasing a variation request. Reviewed case progress; advised status and next steps.",
-  "VAT Ledger Breakdown": "Caller is progress-chasing a VAT ledger breakdown. Checked ledger movements; advised when breakdown will be available/issued.",
-  "VAT Written Enquiry": "Caller is progress-chasing a written enquiry. Confirmed case in queue; advised ",
-  "VAT 68 (COLE/TOGC)": "Caller is progress-chasing VAT68 for COLE/TOGC. Verified receipt and case routing; advised current status and next steps.",
-  "VAT915": "Caller is progress-chasing a VAT915 submission. Confirmed intake stage; advised ",
-  "64-8 processing": "Caller is progress-chasing 64-8 (agent authorisation) processing. Checked authorisation status; advised when access will be active.",
-  "Payment Allocation (IPP)": "Caller is progress-chasing payment allocation (IPP). Reviewed allocation status; advised reconciliation steps and ",
-  "Penalty appeals": "Caller is progress-chasing a penalty appeal. Checked appeal status; advised expected review/decision timeframe.",
-  "Registration": "Caller is progress-chasing VAT registration. Checked application progress; advised ",
-  "Reinstatements": "Caller is progress-chasing a reinstatement request. Confirmed current status; advised ",
-  "Repayment": "Caller is progress-chasing a repayment claim. Checked claim status; advised ",
-  "Tracing Unit 309": "Caller is progress-chasing a Tracing Unit (309) case. Verified investigation status; advised ",
+  "Progress Chasing": {
+    "Deceased Traders (Bereavement)": "Caller is progress-chasing a bereavement case. Checked CCEL/SAP; advised current status and expected next steps/timeframe.",
+    "Default Surcharge": "Caller is progress-chasing a default surcharge notice. Reviewed ledger/penalty records; advised current status and next steps.",
+    "De-Registration": "Caller is progress-chasing a VAT de-registration request. Checked submission status; advised effective date/timeline and actions if delayed.",
+    "DIY": "Caller is progress-chasing a DIY scheme application/claim. Confirmed receipt/processing stage; advised expected outcome timeframe.",
+    "Error Correction": "Caller is progress-chasing an error correction (VAT652). Checked receipt and workflow stage; advised response timeline and any further info needed.",
+    "FRS - Flat Rate Scheme": "Caller is progress-chasing a Flat Rate Scheme application/exit. Verified current status; advised next steps and timing.",
+    "Group Amendments": "Caller is progress-chasing VAT group amendments. Checked system updates; advised processing status and when changes take effect.",
+    "IRU form": "Caller is progress-chasing an IRU form submission. Confirmed receipt; advised current stage and expected follow-up.",
+    "Variations": "Caller is progress-chasing a variation request. Reviewed case progress; advised status and next steps.",
+    "VAT Ledger Breakdown": "Caller is progress-chasing a VAT ledger breakdown. Checked ledger movements; advised when breakdown will be available/issued.",
+    "VAT Written Enquiry": "Caller is progress-chasing a written enquiry. Confirmed case in queue; advised response SLA/timeline.",
+    "VAT 68 (COLE/TOGC)": "Caller is progress-chasing VAT68 for COLE/TOGC. Verified receipt and case routing; advised current status and next steps.",
+    "VAT915": "Caller is progress-chasing a VAT915 submission. Confirmed intake stage; advised expected processing timeframe.",
+    "64-8 processing": "Caller is progress-chasing 64-8 (agent authorisation) processing. Checked authorisation status; advised when access will be active.",
+    "Payment Allocation (IPP)": "Caller is progress-chasing payment allocation (IPP). Reviewed allocation status; advised reconciliation steps and timeline.",
+    "Penalty appeals": "Caller is progress-chasing a penalty appeal. Checked appeal status; advised expected review/decision timeframe.",
+    "Registration": "Caller is progress-chasing VAT registration. Verified application progress; advised next steps and expected effective date.",
+    "Reinstatements": "Caller is progress-chasing a reinstatement request. Confirmed current status; advised actions/timing.",
+    "Repayment": "Caller is progress-chasing a repayment claim. Checked claim status; advised expected payment date and any holds.",
+    "Tracing Unit 309": "Caller is progress-chasing a Tracing Unit (309) case. Verified investigation status; advised next steps/timeline.",
+  },
+
+  // Standalone categories (single default template each)
+  "Repayment": {
+    "Repayment": "Repayment case update:\n- Checked repayment status\n- Awaiting confirmation from finance team"
+  },
+  "VAT Registration": {
+    "VAT Registration": "VAT Registration update:\n- Verified application status\n- Contacted VAT team for next steps"
+  },
+  "Credit release request": {
+    "Credit release request": "Credit release request:\n- Reviewed credit hold\n- Requested approval from credit control"
+  },
+  "PO cancel request": {
+    "PO cancel request": "PO cancel request:\n- Confirmed PO details\n- Initiated cancellation process"
+  },
+  "Ledger quire": {
+    "Ledger quire": "Ledger query:\n- Investigated ledger discrepancy\n- Pending resolution from accounts"
+  },
+  "Dept Management": {
+    "Dept Management": "Department management update:\n- Coordinated with department head\n- Scheduled follow-up meeting"
+  },
+  "Compromised Accounts": {
+    "Compromised Accounts": "Compromised account case:\n- Secured account\n- Initiated fraud investigation"
+  }
 };
 
+// Build one-line context (kept for potential future use; not used in insert now)
 function buildBriefContextLine() {
   const bits = [];
   if (els.vrn && els.vrn.value) bits.push(`VRN: ${els.vrn.value.trim()}`);
-
   const ccel = getCcelRef();
   if (ccel) bits.push(`CCEL: ${ccel}`);
-
   if (els.businessName && els.businessName.value) bits.push(`Business: ${els.businessName.value.trim()}`);
   if (els.callerName && els.callerName.value) {
-    const relVal = (els.relation?.value || "");
-    let relText = relVal || "N/A";
+    const relVal = (els.relation?.value ?? "");
+    let relText = relVal ?? "N/A";
     if (relVal === "Other" && els.relationOther?.value) relText = `Other — ${els.relationOther.value.trim()}`;
     const relSuffix = ` (${relText})`;
     bits.push(`Caller: ${els.callerName.value.trim()}${relSuffix}`);
@@ -279,7 +293,12 @@ function buildBriefContextLine() {
 }
 
 function insertBriefTemplate(topic, append = false) {
-  const tpl = briefTemplates[topic];
+  const category = els.categorySelect?.value;
+  if (!category || !briefTemplates[category]) {
+    toast("Select a category first.");
+    return;
+  }
+  const tpl = briefTemplates[category][topic];
   if (!tpl || !els.brief) return;
   const text = tpl; // Only insert template text
   if (append && els.brief.value.trim()) {
@@ -291,10 +310,26 @@ function insertBriefTemplate(topic, append = false) {
   toast("Template inserted into Brief.");
 }
 
+// Populate templates for selected category
+function populateTemplatesForCategory() {
+  const cat = els.categorySelect?.value || "";
+  const sel = els.briefTemplateSelect;
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Select template —</option>';
+  if (!cat || !briefTemplates[cat]) return;
+  Object.keys(briefTemplates[cat]).forEach(templateName => {
+    const option = document.createElement("option");
+    option.value = templateName;
+    option.textContent = templateName;
+    sel.appendChild(option);
+  });
+}
+
 // ---------- Notes generation ----------
 function buildSecurityLine() {
-  const sel = (els.securityResult?.value || "").trim();
+  const sel = (els.securityResult?.value ?? "").trim();
   if (sel !== "Pass" && sel !== "Fail") return "Security: N/A";
+
   if (sel === "Pass") {
     const items = [];
     if (passChecks.box5?.checked) items.push("PASSED box five figure confirmed");
@@ -328,17 +363,11 @@ function buildCcelNote() {
   if (includeW) lines.push(`Webchat ID: ${els.webchatId.value.trim()}`);
   if (includeA) lines.push(`AUI Ext: ${els.auiExt.value.trim()}`);
 
+  // Keep VRN and Business Name
   lines.push(`VRN: ${val(els.vrn?.value, "N/A")}`);
-  lines.push(`CCEL Ref: ${val(getCcelRef(), "N/A")}`);
   lines.push(`Business Name: ${val(els.businessName?.value)}`);
 
-  lines.push(`Caller Name: ${val(els.callerName?.value)}`);
-  let relation = val(els.relation?.value, "N/A");
-  if ((els.relation?.value || "") === "Other" && els.relationOther?.value) {
-    relation = `Other — ${els.relationOther.value.trim()}`;
-  }
-  lines.push(`Relationship: ${relation}`);
-
+  // Keep Agent details when relation is Agent
   if ((els.relation?.value || "") === "Agent") {
     const agencyParts = [];
     if (els.agencyName?.value) agencyParts.push(els.agencyName.value.trim());
@@ -348,7 +377,7 @@ function buildCcelNote() {
     lines.push(`Agent Ref: ${val(els.agentRef?.value)}`);
   }
 
-  lines.push(`Phone number: ${val(els.phoneNumber?.value)}`);
+  // Security details and Brief
   lines.push(buildSecurityLine());
   lines.push("");
   lines.push("Brief — What they wanted / What I did:");
@@ -358,20 +387,19 @@ function buildCcelNote() {
 
 function buildAuiNote() {
   const lines = [];
+  // Only the items requested (VRN, CCEL, optional AUI Ext + Webchat if toggled)
   lines.push(`VRN: ${val(els.vrn?.value, "N/A")}`);
   const ccel = val(getCcelRef(), "N/A");
   lines.push(`CCEL: ${ccel}`);
+
+  // Respect the "Include in notes" toggles
   const includeWebchat = !!els.includeWebchatId?.checked && val(els.webchatId?.value, "");
   if (includeWebchat) {
     lines.push(`Webchat ID: ${els.webchatId.value.trim()}`);
   }
-  const includeAui = !!els.includeAuiExt?.checked && val(els.auiExt?.value, "");
-  if (includeAui) {
-    lines.push(`AUI Ext: ${els.auiExt.value.trim()}`);
-  }
+  
   return lines.join("\n");
 }
-
 
 function updateNotes() {
   ccelNoteOut && (ccelNoteOut.value = buildCcelNote());
@@ -395,7 +423,6 @@ function resetCall() {
   Object.values(els).forEach(el => {
     if (!el || !el.id) return;
     if (preserveIds.has(el.id)) return; // keep Settings
-
     if (el.tagName === "SELECT") el.selectedIndex = 0;
     else if (el.type === "checkbox") el.checked = false;
     else el.value = "";
@@ -411,7 +438,6 @@ function resetCall() {
   // Hide agent fields & set indicator back to red ✖ and hide "Other" specify
   updateAgentFields();
   updateSecurityIndicator();
-
   updateNotes();
   toast("Call reset.");
 }
@@ -431,7 +457,6 @@ function resetSettings() {
   if (els.auiExt) els.auiExt.value = "";
   if (els.includeWebchatId) els.includeWebchatId.checked = false;
   if (els.includeAuiExt) els.includeAuiExt.checked = false;
-
   updateNotes();
   toast("Settings reset.");
 }
@@ -460,7 +485,6 @@ document.addEventListener("DOMContentLoaded", () => {
   els.officerName?.addEventListener("input", saveSettings);
   els.ccelPrefix?.addEventListener("input", saveSettings);
   els.ccelNumber?.addEventListener("input", saveSettings);
-
   els.webchatId?.addEventListener("input", saveSettings);
   els.auiExt?.addEventListener("input", saveSettings);
   els.includeWebchatId?.addEventListener("change", () => { saveSettings(); updateNotes(); });
@@ -486,7 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       const targetId = btn.getAttribute("data-copy-target");
       const el = document.getElementById(targetId);
-      copyText(el?.value || "");
+      copyText(el?.value ?? "");
     });
   });
 
@@ -495,25 +519,38 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       const which = btn.getAttribute("data-note");
       const text = which === "ccel" ? ccelNoteOut?.value : auiNoteOut?.value;
-      copyText(text || "");
+      copyText(text ?? "");
     });
   });
 
   // Quick Template controls (Append unchecked by default)
   const applyBtn = document.getElementById("applyTemplateBtn");
   const clearBtn = document.getElementById("clearTemplateBtn");
+
+  // Populate template list when category changes
+  els.categorySelect?.addEventListener("change", () => {
+    populateTemplatesForCategory();
+  });
+
   applyBtn?.addEventListener("click", () => {
+    const cat = els.categorySelect?.value;
+    if (!cat) return toast("Select a category first.");
     const sel = els.briefTemplateSelect?.value;
     if (!sel) return toast("Select a template first.");
     insertBriefTemplate(sel, !!els.briefTemplateAppend?.checked);
   });
+
   clearBtn?.addEventListener("click", () => {
     if (els.brief) els.brief.value = "";
     if (els.briefTemplateSelect) els.briefTemplateSelect.selectedIndex = 0;
+    if (els.categorySelect) els.categorySelect.selectedIndex = 0;
     if (els.briefTemplateAppend) els.briefTemplateAppend.checked = false;
     updateNotes();
     toast("Brief cleared.");
   });
+
+  // Initial population (in case a category is preselected by browser restore)
+  populateTemplatesForCategory();
 
   // Reset Call
   resetBtn?.addEventListener("click", resetCall);
@@ -521,6 +558,3 @@ document.addEventListener("DOMContentLoaded", () => {
   // Reset Settings
   resetSettingsBtn?.addEventListener("click", resetSettings);
 });
-
-
-
